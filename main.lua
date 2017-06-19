@@ -1,9 +1,10 @@
 
+local auth_config = require('auth_config')
 local ddb = require('dynamodb')
 
 ddb:new({
-  aws_key = "AKIAIFBUN2GJRQB2FKKQ",
-  aws_secret = "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",
+  aws_key = auth_config.key,
+  aws_secret = auth_config.secret,
   aws_region = "us-east-1",
   debug = true
 })
