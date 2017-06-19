@@ -131,6 +131,7 @@ function m:gen_canonical_request()
     self.signed_canonical_request = string.lower( self:digest( canonical_request ) )
 
     self:log( self.signed_canonical_request )
+
 end
 
 function m:gen_role()
