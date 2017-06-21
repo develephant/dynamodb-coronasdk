@@ -58,19 +58,25 @@ function m:tryRequest()
       elseif evt.status == 400 then
         --retry on ThrottlingException and ProvisionedThroughputExceededException
         if string.ends(response_tbl.__type, "#ThrottlingException") then
-          print('retry')
+          self.events:dispatchEvent({name="DynamoDbEvent", error=1, reason='ThrottlingException, retrying...', status=evt.status})
+          self:retryRequest()
         elseif string.ends(response_tbl.__type, "#ProvisionedThroughputExceededException") then
-          print('retry')
+          self.events:dispatchEvent({name="DynamoDbEvent", error=1, reason='ProvisionedThroughputExceededException, retrying...', status=evt.status})
+          self:retryRequest()
         else --catch all other 400's
           self:clearRetryTimer()
           self.events:dispatchEvent({name="DynamoDbEvent", error=1, reason=response_tbl.message, status=evt.status}) 
         end    
       elseif evt.status == 500 then --internal server error
-        print('retry')
+        self.events:dispatchEvent({name="DynamoDbEvent", error=1, reason='Internal Server Error, retrying...', status=evt.status})
+        self:retryRequest()
       elseif evt.status == 503 then --service unavailable
-        print('retry')
+        self.events:dispatchEvent({name="DynamoDbEvent", error=1, reason='Service Unavailable, retrying...', status=evt.status})
+        self:retryRequest()
       else
         --catch all error
+        self:clearRequest()
+        self:clearRetryTimer()
         self.events:dispatchEvent({name="DynamoDbEvent", error=1, reason=response_tbl.message, status=evt.status})
       end
     end
@@ -84,10 +90,10 @@ function m:retryRequest()
   self.retry_timer = timer.performWithDelay(self.retry_delay, function() self:tryRequest(); end)
   --bump retry delay for exponential backoff, up to a minute
   self.retry_delay = self.retry_delay * 2
-  if self.retry_delay >= 60000 then
+  if self.retry_delay >= 30000 then
     --cannot get request through
     self:clearRequest()
-    self.events:dispatchEvent({name="DynamoDbEvent", isError=1, reason="Maximum retries exceeded. Failed after 1 min."})
+    self.events:dispatchEvent({name="DynamoDbEvent", isError=1, reason="Maximum retries exceeded. Failed after 30 seconds."})
   else
     self:tryRequest()
   end
