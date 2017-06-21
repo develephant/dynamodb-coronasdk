@@ -46,19 +46,32 @@ end
 function m:tryRequest()
   local function listener( evt )
     if (evt.isError) then
-      print(evt.response, evt.status)
+      self.events:dispatchEvent({name="DynamoDbEvent", error=1, reason=evt.response, status=evt.status})
     else
+      local response_tbl = json.decode(evt.response)
       if evt.status == 200 then
         self:clearRetryTimer()
-        local response_tbl = json.decode(evt.response)
         if self.options.debug then
           self:printTable(response_tbl)
         end
-        self.events:dispatchEvent({name="DynamoDbEvent", isError=nil, result=response_tbl, response=evt.response})
+        self.events:dispatchEvent({name="DynamoDbEvent", error=nil, result=response_tbl, response=evt.response})
+      elseif evt.status == 400 then
+        --retry on ThrottlingException and ProvisionedThroughputExceededException
+        if string.ends(response_tbl.__type, "#ThrottlingException") then
+          print('retry')
+        elseif string.ends(response_tbl.__type, "#ProvisionedThroughputExceededException") then
+          print('retry')
+        else --catch all other 400's
+          self:clearRetryTimer()
+          self.events:dispatchEvent({name="DynamoDbEvent", error=1, reason=response_tbl.message, status=evt.status}) 
+        end    
+      elseif evt.status == 500 then --internal server error
+        print('retry')
+      elseif evt.status == 503 then --service unavailable
+        print('retry')
       else
-        --TODO: here we need to check error for retry
-        --for now we just dispatch error
-        self.events:dispatchEvent({name="DynamoDbEvent", isError=1, reason=evt.response, status=evt.status})
+        --catch all error
+        self.events:dispatchEvent({name="DynamoDbEvent", error=1, reason=response_tbl.message, status=evt.status})
       end
     end
   end
@@ -123,11 +136,11 @@ function m:request(action, payload_tbl, listener)
 end
 
 --data type helpers
-function m:Str(string_val)
+function m:S(string_val)
   return {S = string_val}
 end
 
-function m:Num(number_val, raw)
+function m:N(number_val, raw)
 
   if not raw then
     number_val = tostring( number_val )
@@ -136,31 +149,31 @@ function m:Num(number_val, raw)
   return {N = number_val}
 end
 
-function m:Bin(binary_val)
+function m:B(binary_val)
   return {B = mime.encode(binary_val)}
 end
 
-function m:Bool(bool_val)
+function m:BOOL(bool_val)
   return {BOOL = bool_val}
 end
 
-function m:Null()
-  return {NULL = json.null}
+function m:NULL()
+  return {NULL = true}
 end
 
-function m:Map(map_tbl)
+function m:M(map_tbl)
   return {M = map_tbl}
 end
 
-function m:List(list_tbl)
+function m:L(list_tbl)
   return {L = list_tbl}
 end
 
-function m:StrSet(string_set)
+function m:SS(string_set)
   return {SS = string_set}
 end
 
-function m:NumSet(number_set, raw)
+function m:NS(number_set, raw)
   local number_set_encoded = {}
 
   for idx, v in ipairs( number_set ) do 
@@ -174,7 +187,7 @@ function m:NumSet(number_set, raw)
   return {NS = number_set_encoded}
 end
 
-function m:BinSet(binary_set)
+function m:BS(binary_set)
   local binary_set_encoded = {}
   --base64 encode binary values
   for idx, v in ipairs( binary_set ) do 
