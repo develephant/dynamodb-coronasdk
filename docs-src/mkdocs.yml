@@ -1,0 +1,8 @@
+site_name: DynamoDB Plugin
+site_dir: ../docs
+theme: readthedocs
+pages:
+  - 'Introduction': 'index.md'
+  - 'Setup': 'setup.md'
+  - 'Usage': 'usage.md'
+  - 'API': 'api.md'
