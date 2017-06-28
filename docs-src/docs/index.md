@@ -15,11 +15,23 @@ To properly use this module it is assumed that you:
 
 You can download the module from the __[DynamoDB CoronaSDK](https://github.com/develephant/dynamodb-coronasdk)__ repo.
 
-Click the green "Clone or download" button and select "Download ZIP" from the pop-up.
+Click the green __"Clone or download"__ button and select __"Download ZIP"__ from the pop-up.
 
 Expand the ___dynamodb-coronasdk-master.zip___ file.
 
+Copy the ___dynamodb___ directory found inside to your Corona project.
 
+!!! important
+    Be sure to copy over the actual ___dynamodb___ directory, not the files inside.
+
+Your project tree should look something like:
+
+```
+CoronaProjectFolder
+-- dynamodb
+-- main.lua
+-- ...
+```
 
 ## Add the Module
 

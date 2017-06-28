@@ -2,6 +2,12 @@
 
 Amazon DynamoDB Plugin for Corona SDK
 
+## Module Documentation
+
+https://develephant.github.io/dynamodb-coronasdk/
+
+---
+
 ## AWS DynamoDB Quick Start
 
 https://aws.amazon.com/getting-started/tutorials/create-nosql-table/

@@ -39,7 +39,7 @@ db:request("GetItem", payload)
 
 ```
 
-See also: __[Data Methods](api/#data-methods)__.
+See also: __[Attribute Type Methods](api/#attribute-type-methods)__.
 
 ---
 
@@ -48,7 +48,7 @@ See also: __[Data Methods](api/#data-methods)__.
 For full payload parameters and usage see the included links.
 
 !!! important
-    When viewing the __[DynamoDB API Documentation](http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Operations_Amazon_DynamoDB.html)__, all payloads for DynamoDB are built using JSON notation. You will need to convert the JSON stylings to Lua table structures. If you'd rather construct payloads using JSON, then be sure to `json.encode()` your payload before making a request.
+    When viewing the __[DynamoDB API Documentation](http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Operations_Amazon_DynamoDB.html)__, all payloads for DynamoDB are shown using JSON notation. You will need to convert the JSON stylings to Lua table structures. If you'd rather construct payloads using JSON, then be sure to `json.encode()` your payload before making a request.
 
 All examples below are shown using Lua table structures, which have been converted from JSON.
 

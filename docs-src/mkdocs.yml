@@ -6,6 +6,7 @@ pages:
   - 'Overview': 'usage.md'
   - 'API': 'api.md'
   - 'Examples': 'example.md'
+  - 'About': 'about.md'
 markdown_extensions:
   - admonition
   - codehilite

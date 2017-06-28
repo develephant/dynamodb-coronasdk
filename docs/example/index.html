@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Examples - DynamoDB Module</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Examples";
+    var mkdocs_page_input_path = "example.md";
+    var mkdocs_page_url = "/example/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> DynamoDB Module</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Introduction</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../usage/">Overview</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../api/">API</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Examples</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#basic-request">Basic Request</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#payloads">Payloads</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../about/">About</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">DynamoDB Module</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Examples</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="basic-request">Basic Request</h1>
+<pre class="codehilite"><code class="language-lua">--require module
+local db = require('dynamodb.client')
+
+--create new instance
+db:new({
+  aws_key = &quot;&lt;AWS access key&gt;&quot;,
+  aws_secret = &quot;&lt;AWS secret key&quot;&gt;,
+  aws_region = &quot;us-east-1&quot;,
+  debug = true
+})
+
+--build request payload
+local payload =
+{
+  TableName = &quot;Music&quot;,
+  Key = 
+  {
+    Artist = db:S(&quot;The Acme Band&quot;),
+    SongTitle = db:S(&quot;Look Out, World&quot;)
+  }
+}
+
+--set up listener
+function dbEventListener( evt )
+  if evt.error then
+    print(evt.reason, evt.status)
+  else
+    -- evt.result contains data table
+  end
+end
+
+db.events:addEventListener( &quot;DynamoDbEvent&quot;, dbEventListener )
+
+--make DynamoDB request
+db:request(&quot;GetItem&quot;, payload)</code></pre>
+
+
+<p>See also: <strong><a href="../api/#attribute-type-methods">Attribute Type Methods</a></strong>.</p>
+<hr />
+<h2 id="payloads">Payloads</h2>
+<p>For full payload parameters and usage see the included links.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>When viewing the <strong><a href="http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Operations_Amazon_DynamoDB.html">DynamoDB API Documentation</a></strong>, all payloads for DynamoDB are shown using JSON notation. You will need to convert the JSON stylings to Lua table structures. If you'd rather construct payloads using JSON, then be sure to <code>json.encode()</code> your payload before making a request.</p>
+</div>
+<p>All examples below are shown using Lua table structures, which have been converted from JSON.</p>
+<h3 id="getitem">GetItem</h3>
+<p><a href="http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html">http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html</a></p>
+<pre class="codehilite"><code class="language-lua">{
+  TableName = &quot;Music&quot;,
+  Key = 
+  {
+    Artist = db:S(&quot;The Acme Band&quot;),
+    SongTitle = db:S(&quot;Look Out, World&quot;)
+  }
+}</code></pre>
+
+
+<h3 id="putitem">PutItem</h3>
+<p><a href="http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_PutItem.html">http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_PutItem.html</a></p>
+<pre class="codehilite"><code class="language-lua">{
+  TableName = &quot;Music&quot;,
+  Item = 
+  {
+    Artist = db:S(&quot;No One You Know&quot;),
+    SongTitle = db:S(&quot;The Best Song Ever&quot;),
+    Rating = db:N(5)
+  }
+}</code></pre>
+
+
+<h3 id="updateitem">UpdateItem</h3>
+<p><a href="http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html">http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html</a></p>
+<pre class="codehilite"><code class="language-lua">{
+  TableName = &quot;Music&quot;,
+  Key = {
+    Artist = db:S(&quot;No One You Know&quot;),
+    SongTitle = db:S(&quot;The Best Song Ever&quot;)
+  },
+  UpdateExpression = &quot;SET Rating = :val1&quot;,
+  ConditionExpression = &quot;Rating &lt; :val2&quot;,
+  ExpressionAttributeValues = 
+  {
+    [&quot;:val1&quot;] = db:N(10),
+    [&quot;:val2&quot;] = db:N(10)
+  },
+  ReturnValues = &quot;ALL_NEW&quot;
+}</code></pre>
+
+
+<h3 id="deleteitem">DeleteItem</h3>
+<p><a href="http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteItem.html">http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteItem.html</a></p>
+<pre class="codehilite"><code class="language-lua">  {
+    TableName = &quot;Music&quot;,
+    Key = 
+    {
+      Artist = db:S(&quot;The Acme Band&quot;),
+      SongTitle = db:S(&quot;Still In Love&quot;)
+    }
+  }</code></pre>
+
+
+<h3 id="scan">Scan</h3>
+<p><a href="http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html">http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html</a></p>
+<pre class="codehilite"><code class="language-lua">{
+  TableName = &quot;Music&quot;
+}</code></pre>
+
+
+<h3 id="query">Query</h3>
+<p><a href="http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html">http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html</a></p>
+<pre class="codehilite"><code class="language-lua">{
+  TableName = &quot;Music&quot;,
+  KeyConditionExpression = &quot;Artist = :val1&quot;,
+  ExpressionAttributeValues = 
+  {
+    [&quot;:val1&quot;] = db:S(&quot;No One You Know&quot;)
+  }
+}</code></pre>
+
+
+<h3 id="createtable">CreateTable</h3>
+<p><a href="http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateTable.html">http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateTable.html</a></p>
+<pre class="codehilite"><code class="language-lua">{
+  TableName = &quot;Library&quot;,
+  KeySchema = 
+  {
+    {
+      AttributeName = &quot;Book&quot;,
+      KeyType = &quot;HASH&quot;
+    }
+  },
+  AttributeDefinitions = 
+  {
+    {
+      AttributeName = &quot;Book&quot;,
+      AttributeType = &quot;S&quot;
+    }
+  },
+  ProvisionedThroughput = 
+  {
+    ReadCapacityUnits = 5,
+    WriteCapacityUnits = 5
+  }
+}</code></pre>
+
+
+<h3 id="listtables">ListTables</h3>
+<p><a href="http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListTables.html">http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListTables.html</a></p>
+<pre class="codehilite"><code class="language-lua">{
+  Limit = 5
+}</code></pre>
+
+
+<h3 id="describetable">DescribeTable</h3>
+<p><a href="http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTable.html">http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTable.html</a></p>
+<pre class="codehilite"><code class="language-lua">{
+  TableName = &quot;Music&quot;
+}</code></pre>
+
+
+<h3 id="deletetable">DeleteTable</h3>
+<p><a href="http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteTable.html">http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteTable.html</a></p>
+<pre class="codehilite"><code class="language-lua">{
+  TableName = &quot;Library&quot;
+}</code></pre>
+
+
+<h3 id="batchgetitem">BatchGetItem</h3>
+<p><a href="http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchGetItem.html">http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchGetItem.html</a></p>
+<pre class="codehilite"><code class="language-lua">{
+  RequestItems = 
+  {
+    Music = 
+    {
+      Keys = 
+      {
+        {
+          Artist = db:S(&quot;No One You Know&quot;),
+          SongTitle = db:S(&quot;Call Me Today&quot;)
+        },
+        {
+          Artist = db:S(&quot;The Acme Band&quot;),
+          SongTitle = db:S(&quot;Look Out, World&quot;)
+        }
+      },
+      ProjectionExpression = &quot;SongTitle&quot;
+    },
+    Library = 
+    {
+      Keys = 
+      {
+        {
+          Book = db:S(&quot;A Tale Of Three Eyes&quot;)
+        }
+      }
+    }
+  },
+  ReturnConsumedCapacity = &quot;TOTAL&quot;
+}</code></pre>
+
+
+<h3 id="batchwriteitem">BatchWriteItem</h3>
+<p><a href="http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html">http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html</a></p>
+<pre class="codehilite"><code class="language-lua">{
+  RequestItems = 
+  {
+    Library = 
+    {
+      {
+        PutRequest = 
+        {
+          Item = 
+          {
+            Book = db:S(&quot;1000 Degrees In The Sun&quot;)
+          }
+        }
+      }
+    },
+    Music = 
+    {
+      {
+        DeleteRequest = 
+        {
+          Key = 
+          {
+            Artist = db:S(&quot;The Acme Band&quot;),
+            SongTitle = db:S(&quot;Look Out, World&quot;)
+          }
+        }
+      },
+      {
+        DeleteRequest = 
+        {
+          Key = 
+          {
+            Artist = db:S(&quot;No One You Know&quot;),
+            SongTitle = db:S(&quot;My Dog Spot&quot;)
+          }
+        }
+      }
+    }
+  },
+  ReturnConsumedCapacity = &quot;TOTAL&quot;
+}</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../about/" class="btn btn-neutral float-right" title="About">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../api/" class="btn btn-neutral" title="API"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+    
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../api/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../about/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script src="../js/theme.js"></script>
+
+</body>
+</html>

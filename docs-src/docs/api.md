@@ -82,13 +82,15 @@ db.events:addEventListener("DynamoDBEvent", dynamoDBResponse)
 db:request("GetItem", payload)
 ```
 
-# Data Methods
+# Attribute Type Methods
 
-DynamoDB values require a data type, denoted with a string code. While you can manually create each value entry, these methods offer another approach, as well as, make sure the encoding is properly handled.
+DynamoDB attribute values require an attribute type. While you can manually create each value entry, these methods offer another approach, as well as, make sure the encoding is properly handled.
+
+For more details on attributes data see __[DynamoDB AttributeValue](http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AttributeValue.html)__.
 
 ## S
 
-Returns a formatted string value as a table.
+Returns a formatted string value as an attribute value.
 
 ```lua
 local str = db:S("A string value")
@@ -96,7 +98,7 @@ local str = db:S("A string value")
 
 ## N
 
-Returns a formatted number value as a table.
+Returns a formatted number value an attribute value.
 
 ```lua
 local num = db:N(12)
@@ -104,7 +106,7 @@ local num = db:N(12)
 
 ## B
 
-Returns encoded binary data as a table.
+Returns encoded binary data as an attribute value.
 
 ```lua
 local bin = db:B(<binary-data>)
@@ -112,24 +114,25 @@ local bin = db:B(<binary-data>)
 
 ## M
 
-Returns a map value as a table.
+Returns a map value as an attribute value.
 
 !!! tip
-    A map is equivalent to a Lua data table. The values in a map must be typed. A map can hold any data type, including nested values.
+    A map is equivalent to a Lua data table. The values in a map must be typed. A map can hold any attribute type, including nested values.
 
 ```lua
 local map = db:M({
   Artist = db:S("The Acme Band"),
-  Rating = db:N(10) 
+  Rating = db:N(10),
+  Genre = db:L(db:S("Pop"), db:S("Upbeat"))
 })
 ```
 
 ## L
 
-Returns a list value as a table.
+Returns a list value as an attribute value.
 
 !!! tip
-    A list is equivalent to a Lua table array. The values in a list must be typed. A list can hold any data type.
+    A list is equivalent to a Lua table array. The values in a list must be typed. A list can hold any attribute type, including nested values.
 
 ```lua
 local list = db:L({
@@ -142,10 +145,10 @@ local list = db:L({
 
 ## SS
 
-Returns a string set as a table.
+Returns a string set as an attribute value.
 
 !!! tip
-    A string set is equivalent to a table array that can only contain string data types.
+    A string set is equivalent to a table array that can only contain string attribute types.
 
 ```lua
 local string_set = db:SS({
@@ -156,10 +159,10 @@ local string_set = db:SS({
 
 ## NS
 
-Returns a number set as a table.
+Returns a number set as an attribute value.
 
 !!! tip
-    A number set is equivalent to a table array that can only contain number data types.
+    A number set is equivalent to a table array that can only contain number attribute types.
 
 ```lua
 local num_set = db:NS({
@@ -171,10 +174,10 @@ local num_set = db:NS({
 
 ## BS
 
-Returns a binary set as a table.
+Returns a binary set as an attribute value.
 
 !!! tip
-    A binary set is equivalent to a table array that can only contain binary data types.
+    A binary set is equivalent to a table array that can only contain binary attribute types.
 
 ```lua
 local bin_set = db:BS({
@@ -185,7 +188,7 @@ local bin_set = db:BS({
 
 ## BOOL
 
-Returns a boolean value as a table.
+Returns a boolean value as an attribute value.
 
 ```lua
 local bool = db:BOOL(false)
@@ -193,7 +196,7 @@ local bool = db:BOOL(false)
 
 ## NULL
 
-Returns a null value type as a table.
+Returns a null value type as an attribute value.
 
 ```lua
 local null = db:NULL()

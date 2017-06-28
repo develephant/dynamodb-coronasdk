@@ -2,23 +2,248 @@
     "docs": [
         {
             "location": "/",
-            "text": "Welcome to MkDocs\n\n\nFor full documentation visit \nmkdocs.org\n.\n\n\nCommands\n\n\n\n\nmkdocs new [dir-name]\n - Create a new project.\n\n\nmkdocs serve\n - Start the live-reloading docs server.\n\n\nmkdocs build\n - Build the documentation site.\n\n\nmkdocs help\n - Print this help message.\n\n\n\n\nProject layout\n\n\nmkdocs.yml    # The configuration file.\ndocs/\n    index.md  # The documentation homepage.\n    ...       # Other markdown pages, images and other files.",
-            "title": "Home"
+            "text": "DynamoDB Corona Module\n\n\nThe DynamoDB module provides access to the low-level AWS DynamoDB API.\n\n\nPrerequisites\n\n\nTo properly use this module it is assumed that you:\n\n\n\n\nHave a current AWS account.\n\n\nUnderstand how to use DynamoDB.\n\n\nKnow where to find documentation.\n\n\nCan set up IAM users, as well as their permissions.\n\n\n\n\nGet the Module\n\n\nYou can download the module from the \nDynamoDB CoronaSDK\n repo.\n\n\nClick the green \n\"Clone or download\"\n button and select \n\"Download ZIP\"\n from the pop-up.\n\n\nExpand the \ndynamodb-coronasdk-master.zip\n file.\n\n\nCopy the \ndynamodb\n directory found inside to your Corona project.\n\n\n\n\nImportant\n\n\nBe sure to copy over the actual \ndynamodb\n directory, not the files inside.\n\n\n\n\nYour project tree should look something like:\n\n\nCoronaProjectFolder\n-- dynamodb\n-- main.lua\n-- ...\n\n\n\n\nAdd the Module\n\n\nlocal dynamodb = require(\"dynamodb.client\")\n\n\n\n\nCreate an Instance\n\n\nlocal db = dynamodb:new( config )\n\n\n\n\nSee \nnew()\n for configuration options.\n\n\nMake a Request\n\n\nlocal function dbListener( evt )\n  if not evt.error then\n    print(evt.result.some_key)\n  end\nend\ndb.events:addEventListener(dbListener)\n\ndb:request( action, payload )\n\n\n\n\nSee \nrequest()\n for more details.",
+            "title": "Introduction"
         },
         {
-            "location": "/#welcome-to-mkdocs",
-            "text": "For full documentation visit  mkdocs.org .",
-            "title": "Welcome to MkDocs"
+            "location": "/#dynamodb-corona-module",
+            "text": "The DynamoDB module provides access to the low-level AWS DynamoDB API.",
+            "title": "DynamoDB Corona Module"
         },
         {
-            "location": "/#commands",
-            "text": "mkdocs new [dir-name]  - Create a new project.  mkdocs serve  - Start the live-reloading docs server.  mkdocs build  - Build the documentation site.  mkdocs help  - Print this help message.",
-            "title": "Commands"
+            "location": "/#prerequisites",
+            "text": "To properly use this module it is assumed that you:   Have a current AWS account.  Understand how to use DynamoDB.  Know where to find documentation.  Can set up IAM users, as well as their permissions.",
+            "title": "Prerequisites"
         },
         {
-            "location": "/#project-layout",
-            "text": "mkdocs.yml    # The configuration file.\ndocs/\n    index.md  # The documentation homepage.\n    ...       # Other markdown pages, images and other files.",
-            "title": "Project layout"
+            "location": "/#get-the-module",
+            "text": "You can download the module from the  DynamoDB CoronaSDK  repo.  Click the green  \"Clone or download\"  button and select  \"Download ZIP\"  from the pop-up.  Expand the  dynamodb-coronasdk-master.zip  file.  Copy the  dynamodb  directory found inside to your Corona project.   Important  Be sure to copy over the actual  dynamodb  directory, not the files inside.   Your project tree should look something like:  CoronaProjectFolder\n-- dynamodb\n-- main.lua\n-- ...",
+            "title": "Get the Module"
+        },
+        {
+            "location": "/#add-the-module",
+            "text": "local dynamodb = require(\"dynamodb.client\")",
+            "title": "Add the Module"
+        },
+        {
+            "location": "/#create-an-instance",
+            "text": "local db = dynamodb:new( config )  See  new()  for configuration options.",
+            "title": "Create an Instance"
+        },
+        {
+            "location": "/#make-a-request",
+            "text": "local function dbListener( evt )\n  if not evt.error then\n    print(evt.result.some_key)\n  end\nend\ndb.events:addEventListener(dbListener)\n\ndb:request( action, payload )  See  request()  for more details.",
+            "title": "Make a Request"
+        },
+        {
+            "location": "/usage/",
+            "text": "Building a Request\n\n\nTo perform operations on DynamoDB you will need to create a request that includes both an \nAction\n and \nPayload\n. \n\n\nAn \nAction\n is the operation you would like to perform. See \nActions\n.\n\n\nA \nPayload\n is a data structure that includes the needed parameters for an \nAction\n. You can derive payload parameters by browsing the \nDynamoDB API Documentation\n.\n\n\nPayloads in this documentation are shown using Lua table structures, which have been converted from JSON.\n\n\n\n\nImportant\n\n\nWhen viewing the \nDynamoDB API Documentation\n, all payloads for DynamoDB are shown using JSON notation. You will need to convert the JSON stylings to Lua table structures. If you'd rather construct payloads using JSON, then be sure to \njson.encode()\n your payload before making a request.\n\n\n\n\nFor examples of the different types of payloads see \nExamples\n.\n\n\n\n\nActions\n\n\nActions are the operations to be perfomed against the DynamoDB service. You must provide an action to the \nrequest\n method.\n\n\nExample\n\n\ndb:request(\"GetItem\", payload)\n\n\n\n\nItems\n\n\n\n\nGetItem\n\n\nPutItem\n\n\nUpdateItem\n\n\nDeleteItem\n\n\n\n\nScan/Query\n\n\n\n\nScan\n\n\nQuery\n\n\n\n\nTables\n\n\n\n\nCreateTable\n\n\nListTables\n\n\nDescribeTable\n\n\nDeleteTable\n\n\n\n\nBatch\n\n\n\n\nBatchGetItem\n\n\nBatchWriteItem\n\n\n\n\n\n\nTip\n\n\nFor a complete list of actions available see \nDynamoDB Actions\n.\n\n\n\n\n\n\nPayloads\n\n\nA payload contains the required parameters for any given action. Payload details can be found in the \nDynamoDB API Documentation\n.\n\n\nFor some example payload structures see \nExamples\n.\n\n\nAttribute Types\n\n\nDynamoDB supports a variety of attribute types that you must specify for all attribute values in the payload. They are notated using a string code.\n\n\n\n\n\n\n\n\nCode\n\n\nType\n\n\n\n\n\n\n\n\n\n\nS\n\n\nString\n\n\n\n\n\n\nN\n\n\nNumber\n\n\n\n\n\n\nB\n\n\nBinary\n\n\n\n\n\n\nM\n\n\nMap\n\n\n\n\n\n\nL\n\n\nList\n\n\n\n\n\n\nSS\n\n\nString Set\n\n\n\n\n\n\nNS\n\n\nNumber Set\n\n\n\n\n\n\nBS\n\n\nBinary Set\n\n\n\n\n\n\nBOOL\n\n\nBoolean\n\n\n\n\n\n\nNULL\n\n\nNull\n\n\n\n\n\n\n\n\nFor more details see \nDynamoDB AttributeValue\n.\n\n\nTo indicate an attribute type, you create a table with the type code as the key, and the data as the value.\n\n\nExamples\n\n\n--String\nlocal str = {S=\"My Best Song\"}\n\n--Number \nlocal num = {N=12}\n\n--Map\nlocal map = {M = \n{\n  Artist = {S=\"The Acme Band\"},\n  SongTitle = {S=\"Super Fan\"},\n  Rating = {N=10}\n}}\n\n--List\nlocal list = {L =\n{\n  {S=\"Blue\"}, {BOOL=false}, {N=23}\n}}\n\n--Number Set\nlocal num_set = {NS = {\n  {N=12}, {N=45}, {N=2.45}\n}}\n\n\n\n\n\n\nTip\n\n\nYou can also use API methods to create attribute values. See \nAttribute Type Methods\n.",
+            "title": "Overview"
+        },
+        {
+            "location": "/usage/#building-a-request",
+            "text": "To perform operations on DynamoDB you will need to create a request that includes both an  Action  and  Payload .   An  Action  is the operation you would like to perform. See  Actions .  A  Payload  is a data structure that includes the needed parameters for an  Action . You can derive payload parameters by browsing the  DynamoDB API Documentation .  Payloads in this documentation are shown using Lua table structures, which have been converted from JSON.   Important  When viewing the  DynamoDB API Documentation , all payloads for DynamoDB are shown using JSON notation. You will need to convert the JSON stylings to Lua table structures. If you'd rather construct payloads using JSON, then be sure to  json.encode()  your payload before making a request.   For examples of the different types of payloads see  Examples .",
+            "title": "Building a Request"
+        },
+        {
+            "location": "/usage/#actions",
+            "text": "Actions are the operations to be perfomed against the DynamoDB service. You must provide an action to the  request  method.  Example  db:request(\"GetItem\", payload)",
+            "title": "Actions"
+        },
+        {
+            "location": "/usage/#items",
+            "text": "GetItem  PutItem  UpdateItem  DeleteItem",
+            "title": "Items"
+        },
+        {
+            "location": "/usage/#scanquery",
+            "text": "Scan  Query",
+            "title": "Scan/Query"
+        },
+        {
+            "location": "/usage/#tables",
+            "text": "CreateTable  ListTables  DescribeTable  DeleteTable",
+            "title": "Tables"
+        },
+        {
+            "location": "/usage/#batch",
+            "text": "BatchGetItem  BatchWriteItem    Tip  For a complete list of actions available see  DynamoDB Actions .",
+            "title": "Batch"
+        },
+        {
+            "location": "/usage/#payloads",
+            "text": "A payload contains the required parameters for any given action. Payload details can be found in the  DynamoDB API Documentation .  For some example payload structures see  Examples .",
+            "title": "Payloads"
+        },
+        {
+            "location": "/usage/#attribute-types",
+            "text": "DynamoDB supports a variety of attribute types that you must specify for all attribute values in the payload. They are notated using a string code.     Code  Type      S  String    N  Number    B  Binary    M  Map    L  List    SS  String Set    NS  Number Set    BS  Binary Set    BOOL  Boolean    NULL  Null     For more details see  DynamoDB AttributeValue .  To indicate an attribute type, you create a table with the type code as the key, and the data as the value.  Examples  --String\nlocal str = {S=\"My Best Song\"}\n\n--Number \nlocal num = {N=12}\n\n--Map\nlocal map = {M = \n{\n  Artist = {S=\"The Acme Band\"},\n  SongTitle = {S=\"Super Fan\"},\n  Rating = {N=10}\n}}\n\n--List\nlocal list = {L =\n{\n  {S=\"Blue\"}, {BOOL=false}, {N=23}\n}}\n\n--Number Set\nlocal num_set = {NS = {\n  {N=12}, {N=45}, {N=2.45}\n}}   Tip  You can also use API methods to create attribute values. See  Attribute Type Methods .",
+            "title": "Attribute Types"
+        },
+        {
+            "location": "/api/",
+            "text": "Methods\n\n\nnew\n\n\nCreate a new instance of the DynamoDB object.\n\n\nlocal db = dynamodb:new( config )\n\n\n\n\nConfig Properties\n\n\n\n\n\n\n\n\nName\n\n\nDescription\n\n\nType\n\n\n\n\n\n\n\n\n\n\naws_key\n\n\nUser AWS access key.\n\n\nString\n\n\n\n\n\n\naws_secret\n\n\nUser AWS secret key.\n\n\nString\n\n\n\n\n\n\naws_region\n\n\nAWS region for DynamoDB.\n\n\nString\n\n\n\n\n\n\ndebug\n\n\nOutput response data structure.\n\n\nBoolean\n\n\n\n\n\n\n\n\nExample\n\n\nlocal dynamodb = require(\"dynamodb.client\")\n\nlocal db = dynamodb:new(\n{\n  aws_key = auth.key,\n  aws_secret = auth.secret,\n  aws_region = \"us-east-1\",\n  debug = true\n})\n\n\n\n\n\n\nWarning\n\n\nIt should be noted that your service could be compromised if someone gets a hold of your secret key. Make sure to always create a unique IAM user, with the minimum permissions required.\n\n\n\n\n\n\nrequest\n\n\nMake a request to the DynamoDB service.\n\n\n\n\nImportant\n\n\nA request requires an event listener to reteive the response data. See \nEvents\n.\n\n\n\n\ndb:request(action, payload)\n\n\n\n\nRequest Properties\n\n\n\n\n\n\n\n\nName\n\n\nDescription\n\n\nType\n\n\n\n\n\n\n\n\n\n\naction\n\n\nThe DynamoDB action to perform.\n\n\nString\n\n\n\n\n\n\npayload\n\n\nThe required payload for the action.\n\n\nTable\n\n\n\n\n\n\n\n\nSee \nActions\n for more details on action types.\n\n\nSee \nExamples\n for more details on payload types.\n\n\nEvents\n\n\nDynamoDBEvent\n\n\nTo capture the request response data, you must register an event listener.\n\n\nlocal function dynamoDBResponse( evt )\n  if evt.error then\n    print(evt.reason, evt.status)\n  else\n    --response as table data\n    local data_table = evt.result --Table\n\n    --response as JSON string\n    print(evt.response) --JSON\n  end\nend\n\ndb.events:addEventListener(\"DynamoDBEvent\", dynamoDBResponse)\n\ndb:request(\"GetItem\", payload)\n\n\n\n\nAttribute Type Methods\n\n\nDynamoDB attribute values require an attribute type. While you can manually create each value entry, these methods offer another approach, as well as, make sure the encoding is properly handled.\n\n\nFor more details on attributes data see \nDynamoDB AttributeValue\n.\n\n\nS\n\n\nReturns a formatted string value as an attribute value.\n\n\nlocal str = db:S(\"A string value\")\n\n\n\n\nN\n\n\nReturns a formatted number value an attribute value.\n\n\nlocal num = db:N(12)\n\n\n\n\nB\n\n\nReturns encoded binary data as an attribute value.\n\n\nlocal bin = db:B(<binary-data>)\n\n\n\n\nM\n\n\nReturns a map value as an attribute value.\n\n\n\n\nTip\n\n\nA map is equivalent to a Lua data table. The values in a map must be typed. A map can hold any attribute type, including nested values.\n\n\n\n\nlocal map = db:M({\n  Artist = db:S(\"The Acme Band\"),\n  Rating = db:N(10),\n  Genre = db:L(db:S(\"Pop\"), db:S(\"Upbeat\"))\n})\n\n\n\n\nL\n\n\nReturns a list value as an attribute value.\n\n\n\n\nTip\n\n\nA list is equivalent to a Lua table array. The values in a list must be typed. A list can hold any attribute type, including nested values.\n\n\n\n\nlocal list = db:L({\n  db:S(\"Hello\"),\n  db:N(25),\n  db:BOOL(false),\n  db:M({Age=db:N(25), Name=db:S(\"John\")})\n})\n\n\n\n\nSS\n\n\nReturns a string set as an attribute value.\n\n\n\n\nTip\n\n\nA string set is equivalent to a table array that can only contain string attribute types.\n\n\n\n\nlocal string_set = db:SS({\n  db:S(\"Hello\"),\n  db:S(\"World\")\n})\n\n\n\n\nNS\n\n\nReturns a number set as an attribute value.\n\n\n\n\nTip\n\n\nA number set is equivalent to a table array that can only contain number attribute types.\n\n\n\n\nlocal num_set = db:NS({\n  db:N(12),\n  db:N(34),\n  db:N(2.34)\n})\n\n\n\n\nBS\n\n\nReturns a binary set as an attribute value.\n\n\n\n\nTip\n\n\nA binary set is equivalent to a table array that can only contain binary attribute types.\n\n\n\n\nlocal bin_set = db:BS({\n  db:B(<binary-data>),\n  db:B(<binary-data>)\n})\n\n\n\n\nBOOL\n\n\nReturns a boolean value as an attribute value.\n\n\nlocal bool = db:BOOL(false)\n\n\n\n\nNULL\n\n\nReturns a null value type as an attribute value.\n\n\nlocal null = db:NULL()",
+            "title": "API"
+        },
+        {
+            "location": "/api/#methods",
+            "text": "",
+            "title": "Methods"
+        },
+        {
+            "location": "/api/#new",
+            "text": "Create a new instance of the DynamoDB object.  local db = dynamodb:new( config )  Config Properties     Name  Description  Type      aws_key  User AWS access key.  String    aws_secret  User AWS secret key.  String    aws_region  AWS region for DynamoDB.  String    debug  Output response data structure.  Boolean     Example  local dynamodb = require(\"dynamodb.client\")\n\nlocal db = dynamodb:new(\n{\n  aws_key = auth.key,\n  aws_secret = auth.secret,\n  aws_region = \"us-east-1\",\n  debug = true\n})   Warning  It should be noted that your service could be compromised if someone gets a hold of your secret key. Make sure to always create a unique IAM user, with the minimum permissions required.",
+            "title": "new"
+        },
+        {
+            "location": "/api/#request",
+            "text": "Make a request to the DynamoDB service.   Important  A request requires an event listener to reteive the response data. See  Events .   db:request(action, payload)  Request Properties     Name  Description  Type      action  The DynamoDB action to perform.  String    payload  The required payload for the action.  Table     See  Actions  for more details on action types.  See  Examples  for more details on payload types.",
+            "title": "request"
+        },
+        {
+            "location": "/api/#events",
+            "text": "",
+            "title": "Events"
+        },
+        {
+            "location": "/api/#dynamodbevent",
+            "text": "To capture the request response data, you must register an event listener.  local function dynamoDBResponse( evt )\n  if evt.error then\n    print(evt.reason, evt.status)\n  else\n    --response as table data\n    local data_table = evt.result --Table\n\n    --response as JSON string\n    print(evt.response) --JSON\n  end\nend\n\ndb.events:addEventListener(\"DynamoDBEvent\", dynamoDBResponse)\n\ndb:request(\"GetItem\", payload)",
+            "title": "DynamoDBEvent"
+        },
+        {
+            "location": "/api/#attribute-type-methods",
+            "text": "DynamoDB attribute values require an attribute type. While you can manually create each value entry, these methods offer another approach, as well as, make sure the encoding is properly handled.  For more details on attributes data see  DynamoDB AttributeValue .",
+            "title": "Attribute Type Methods"
+        },
+        {
+            "location": "/api/#s",
+            "text": "Returns a formatted string value as an attribute value.  local str = db:S(\"A string value\")",
+            "title": "S"
+        },
+        {
+            "location": "/api/#n",
+            "text": "Returns a formatted number value an attribute value.  local num = db:N(12)",
+            "title": "N"
+        },
+        {
+            "location": "/api/#b",
+            "text": "Returns encoded binary data as an attribute value.  local bin = db:B(<binary-data>)",
+            "title": "B"
+        },
+        {
+            "location": "/api/#m",
+            "text": "Returns a map value as an attribute value.   Tip  A map is equivalent to a Lua data table. The values in a map must be typed. A map can hold any attribute type, including nested values.   local map = db:M({\n  Artist = db:S(\"The Acme Band\"),\n  Rating = db:N(10),\n  Genre = db:L(db:S(\"Pop\"), db:S(\"Upbeat\"))\n})",
+            "title": "M"
+        },
+        {
+            "location": "/api/#l",
+            "text": "Returns a list value as an attribute value.   Tip  A list is equivalent to a Lua table array. The values in a list must be typed. A list can hold any attribute type, including nested values.   local list = db:L({\n  db:S(\"Hello\"),\n  db:N(25),\n  db:BOOL(false),\n  db:M({Age=db:N(25), Name=db:S(\"John\")})\n})",
+            "title": "L"
+        },
+        {
+            "location": "/api/#ss",
+            "text": "Returns a string set as an attribute value.   Tip  A string set is equivalent to a table array that can only contain string attribute types.   local string_set = db:SS({\n  db:S(\"Hello\"),\n  db:S(\"World\")\n})",
+            "title": "SS"
+        },
+        {
+            "location": "/api/#ns",
+            "text": "Returns a number set as an attribute value.   Tip  A number set is equivalent to a table array that can only contain number attribute types.   local num_set = db:NS({\n  db:N(12),\n  db:N(34),\n  db:N(2.34)\n})",
+            "title": "NS"
+        },
+        {
+            "location": "/api/#bs",
+            "text": "Returns a binary set as an attribute value.   Tip  A binary set is equivalent to a table array that can only contain binary attribute types.   local bin_set = db:BS({\n  db:B(<binary-data>),\n  db:B(<binary-data>)\n})",
+            "title": "BS"
+        },
+        {
+            "location": "/api/#bool",
+            "text": "Returns a boolean value as an attribute value.  local bool = db:BOOL(false)",
+            "title": "BOOL"
+        },
+        {
+            "location": "/api/#null",
+            "text": "Returns a null value type as an attribute value.  local null = db:NULL()",
+            "title": "NULL"
+        },
+        {
+            "location": "/example/",
+            "text": "Basic Request\n\n\n--require module\nlocal db = require('dynamodb.client')\n\n--create new instance\ndb:new({\n  aws_key = \"<AWS access key>\",\n  aws_secret = \"<AWS secret key\">,\n  aws_region = \"us-east-1\",\n  debug = true\n})\n\n--build request payload\nlocal payload =\n{\n  TableName = \"Music\",\n  Key = \n  {\n    Artist = db:S(\"The Acme Band\"),\n    SongTitle = db:S(\"Look Out, World\")\n  }\n}\n\n--set up listener\nfunction dbEventListener( evt )\n  if evt.error then\n    print(evt.reason, evt.status)\n  else\n    -- evt.result contains data table\n  end\nend\n\ndb.events:addEventListener( \"DynamoDbEvent\", dbEventListener )\n\n--make DynamoDB request\ndb:request(\"GetItem\", payload)\n\n\n\n\nSee also: \nAttribute Type Methods\n.\n\n\n\n\nPayloads\n\n\nFor full payload parameters and usage see the included links.\n\n\n\n\nImportant\n\n\nWhen viewing the \nDynamoDB API Documentation\n, all payloads for DynamoDB are shown using JSON notation. You will need to convert the JSON stylings to Lua table structures. If you'd rather construct payloads using JSON, then be sure to \njson.encode()\n your payload before making a request.\n\n\n\n\nAll examples below are shown using Lua table structures, which have been converted from JSON.\n\n\nGetItem\n\n\nhttp://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html\n\n\n{\n  TableName = \"Music\",\n  Key = \n  {\n    Artist = db:S(\"The Acme Band\"),\n    SongTitle = db:S(\"Look Out, World\")\n  }\n}\n\n\n\n\nPutItem\n\n\nhttp://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_PutItem.html\n\n\n{\n  TableName = \"Music\",\n  Item = \n  {\n    Artist = db:S(\"No One You Know\"),\n    SongTitle = db:S(\"The Best Song Ever\"),\n    Rating = db:N(5)\n  }\n}\n\n\n\n\nUpdateItem\n\n\nhttp://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html\n\n\n{\n  TableName = \"Music\",\n  Key = {\n    Artist = db:S(\"No One You Know\"),\n    SongTitle = db:S(\"The Best Song Ever\")\n  },\n  UpdateExpression = \"SET Rating = :val1\",\n  ConditionExpression = \"Rating < :val2\",\n  ExpressionAttributeValues = \n  {\n    [\":val1\"] = db:N(10),\n    [\":val2\"] = db:N(10)\n  },\n  ReturnValues = \"ALL_NEW\"\n}\n\n\n\n\nDeleteItem\n\n\nhttp://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteItem.html\n\n\n  {\n    TableName = \"Music\",\n    Key = \n    {\n      Artist = db:S(\"The Acme Band\"),\n      SongTitle = db:S(\"Still In Love\")\n    }\n  }\n\n\n\n\nScan\n\n\nhttp://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html\n\n\n{\n  TableName = \"Music\"\n}\n\n\n\n\nQuery\n\n\nhttp://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html\n\n\n{\n  TableName = \"Music\",\n  KeyConditionExpression = \"Artist = :val1\",\n  ExpressionAttributeValues = \n  {\n    [\":val1\"] = db:S(\"No One You Know\")\n  }\n}\n\n\n\n\nCreateTable\n\n\nhttp://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateTable.html\n\n\n{\n  TableName = \"Library\",\n  KeySchema = \n  {\n    {\n      AttributeName = \"Book\",\n      KeyType = \"HASH\"\n    }\n  },\n  AttributeDefinitions = \n  {\n    {\n      AttributeName = \"Book\",\n      AttributeType = \"S\"\n    }\n  },\n  ProvisionedThroughput = \n  {\n    ReadCapacityUnits = 5,\n    WriteCapacityUnits = 5\n  }\n}\n\n\n\n\nListTables\n\n\nhttp://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListTables.html\n\n\n{\n  Limit = 5\n}\n\n\n\n\nDescribeTable\n\n\nhttp://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTable.html\n\n\n{\n  TableName = \"Music\"\n}\n\n\n\n\nDeleteTable\n\n\nhttp://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteTable.html\n\n\n{\n  TableName = \"Library\"\n}\n\n\n\n\nBatchGetItem\n\n\nhttp://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchGetItem.html\n\n\n{\n  RequestItems = \n  {\n    Music = \n    {\n      Keys = \n      {\n        {\n          Artist = db:S(\"No One You Know\"),\n          SongTitle = db:S(\"Call Me Today\")\n        },\n        {\n          Artist = db:S(\"The Acme Band\"),\n          SongTitle = db:S(\"Look Out, World\")\n        }\n      },\n      ProjectionExpression = \"SongTitle\"\n    },\n    Library = \n    {\n      Keys = \n      {\n        {\n          Book = db:S(\"A Tale Of Three Eyes\")\n        }\n      }\n    }\n  },\n  ReturnConsumedCapacity = \"TOTAL\"\n}\n\n\n\n\nBatchWriteItem\n\n\nhttp://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html\n\n\n{\n  RequestItems = \n  {\n    Library = \n    {\n      {\n        PutRequest = \n        {\n          Item = \n          {\n            Book = db:S(\"1000 Degrees In The Sun\")\n          }\n        }\n      }\n    },\n    Music = \n    {\n      {\n        DeleteRequest = \n        {\n          Key = \n          {\n            Artist = db:S(\"The Acme Band\"),\n            SongTitle = db:S(\"Look Out, World\")\n          }\n        }\n      },\n      {\n        DeleteRequest = \n        {\n          Key = \n          {\n            Artist = db:S(\"No One You Know\"),\n            SongTitle = db:S(\"My Dog Spot\")\n          }\n        }\n      }\n    }\n  },\n  ReturnConsumedCapacity = \"TOTAL\"\n}",
+            "title": "Examples"
+        },
+        {
+            "location": "/example/#basic-request",
+            "text": "--require module\nlocal db = require('dynamodb.client')\n\n--create new instance\ndb:new({\n  aws_key = \"<AWS access key>\",\n  aws_secret = \"<AWS secret key\">,\n  aws_region = \"us-east-1\",\n  debug = true\n})\n\n--build request payload\nlocal payload =\n{\n  TableName = \"Music\",\n  Key = \n  {\n    Artist = db:S(\"The Acme Band\"),\n    SongTitle = db:S(\"Look Out, World\")\n  }\n}\n\n--set up listener\nfunction dbEventListener( evt )\n  if evt.error then\n    print(evt.reason, evt.status)\n  else\n    -- evt.result contains data table\n  end\nend\n\ndb.events:addEventListener( \"DynamoDbEvent\", dbEventListener )\n\n--make DynamoDB request\ndb:request(\"GetItem\", payload)  See also:  Attribute Type Methods .",
+            "title": "Basic Request"
+        },
+        {
+            "location": "/example/#payloads",
+            "text": "For full payload parameters and usage see the included links.   Important  When viewing the  DynamoDB API Documentation , all payloads for DynamoDB are shown using JSON notation. You will need to convert the JSON stylings to Lua table structures. If you'd rather construct payloads using JSON, then be sure to  json.encode()  your payload before making a request.   All examples below are shown using Lua table structures, which have been converted from JSON.",
+            "title": "Payloads"
+        },
+        {
+            "location": "/example/#getitem",
+            "text": "http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_GetItem.html  {\n  TableName = \"Music\",\n  Key = \n  {\n    Artist = db:S(\"The Acme Band\"),\n    SongTitle = db:S(\"Look Out, World\")\n  }\n}",
+            "title": "GetItem"
+        },
+        {
+            "location": "/example/#putitem",
+            "text": "http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_PutItem.html  {\n  TableName = \"Music\",\n  Item = \n  {\n    Artist = db:S(\"No One You Know\"),\n    SongTitle = db:S(\"The Best Song Ever\"),\n    Rating = db:N(5)\n  }\n}",
+            "title": "PutItem"
+        },
+        {
+            "location": "/example/#updateitem",
+            "text": "http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_UpdateItem.html  {\n  TableName = \"Music\",\n  Key = {\n    Artist = db:S(\"No One You Know\"),\n    SongTitle = db:S(\"The Best Song Ever\")\n  },\n  UpdateExpression = \"SET Rating = :val1\",\n  ConditionExpression = \"Rating < :val2\",\n  ExpressionAttributeValues = \n  {\n    [\":val1\"] = db:N(10),\n    [\":val2\"] = db:N(10)\n  },\n  ReturnValues = \"ALL_NEW\"\n}",
+            "title": "UpdateItem"
+        },
+        {
+            "location": "/example/#deleteitem",
+            "text": "http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteItem.html    {\n    TableName = \"Music\",\n    Key = \n    {\n      Artist = db:S(\"The Acme Band\"),\n      SongTitle = db:S(\"Still In Love\")\n    }\n  }",
+            "title": "DeleteItem"
+        },
+        {
+            "location": "/example/#scan",
+            "text": "http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html  {\n  TableName = \"Music\"\n}",
+            "title": "Scan"
+        },
+        {
+            "location": "/example/#query",
+            "text": "http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Query.html  {\n  TableName = \"Music\",\n  KeyConditionExpression = \"Artist = :val1\",\n  ExpressionAttributeValues = \n  {\n    [\":val1\"] = db:S(\"No One You Know\")\n  }\n}",
+            "title": "Query"
+        },
+        {
+            "location": "/example/#createtable",
+            "text": "http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_CreateTable.html  {\n  TableName = \"Library\",\n  KeySchema = \n  {\n    {\n      AttributeName = \"Book\",\n      KeyType = \"HASH\"\n    }\n  },\n  AttributeDefinitions = \n  {\n    {\n      AttributeName = \"Book\",\n      AttributeType = \"S\"\n    }\n  },\n  ProvisionedThroughput = \n  {\n    ReadCapacityUnits = 5,\n    WriteCapacityUnits = 5\n  }\n}",
+            "title": "CreateTable"
+        },
+        {
+            "location": "/example/#listtables",
+            "text": "http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_ListTables.html  {\n  Limit = 5\n}",
+            "title": "ListTables"
+        },
+        {
+            "location": "/example/#describetable",
+            "text": "http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DescribeTable.html  {\n  TableName = \"Music\"\n}",
+            "title": "DescribeTable"
+        },
+        {
+            "location": "/example/#deletetable",
+            "text": "http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_DeleteTable.html  {\n  TableName = \"Library\"\n}",
+            "title": "DeleteTable"
+        },
+        {
+            "location": "/example/#batchgetitem",
+            "text": "http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchGetItem.html  {\n  RequestItems = \n  {\n    Music = \n    {\n      Keys = \n      {\n        {\n          Artist = db:S(\"No One You Know\"),\n          SongTitle = db:S(\"Call Me Today\")\n        },\n        {\n          Artist = db:S(\"The Acme Band\"),\n          SongTitle = db:S(\"Look Out, World\")\n        }\n      },\n      ProjectionExpression = \"SongTitle\"\n    },\n    Library = \n    {\n      Keys = \n      {\n        {\n          Book = db:S(\"A Tale Of Three Eyes\")\n        }\n      }\n    }\n  },\n  ReturnConsumedCapacity = \"TOTAL\"\n}",
+            "title": "BatchGetItem"
+        },
+        {
+            "location": "/example/#batchwriteitem",
+            "text": "http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_BatchWriteItem.html  {\n  RequestItems = \n  {\n    Library = \n    {\n      {\n        PutRequest = \n        {\n          Item = \n          {\n            Book = db:S(\"1000 Degrees In The Sun\")\n          }\n        }\n      }\n    },\n    Music = \n    {\n      {\n        DeleteRequest = \n        {\n          Key = \n          {\n            Artist = db:S(\"The Acme Band\"),\n            SongTitle = db:S(\"Look Out, World\")\n          }\n        }\n      },\n      {\n        DeleteRequest = \n        {\n          Key = \n          {\n            Artist = db:S(\"No One You Know\"),\n            SongTitle = db:S(\"My Dog Spot\")\n          }\n        }\n      }\n    }\n  },\n  ReturnConsumedCapacity = \"TOTAL\"\n}",
+            "title": "BatchWriteItem"
+        },
+        {
+            "location": "/about/",
+            "text": "Code and documentation  \n\u00a92017 C. Byerley (\ndevelephant\n)\n.\n\n\nLicensed under the \nApache 2.0\n license.\n\n\nThis module is open source. Help make it better by contributing at \nhttps://github.com/develephant/dynamodb-coronasdk",
+            "title": "About"
         }
     ]
 }
