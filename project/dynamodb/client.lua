@@ -60,7 +60,7 @@ end
 function m:tryRequest()
   local function listener( evt )
     if (evt.isError) then
-      self.events:dispatchEvent({name="DynamoDbEvent", error=1, reason=evt.response, status=evt.status})
+      self.events:dispatchEvent({name="DynamoDBEvent", error=1, reason=evt.response, status=evt.status})
     else
       local response_tbl = json.decode(evt.response)
       if evt.status == 200 then
@@ -68,30 +68,30 @@ function m:tryRequest()
         if self.options.debug then
           self:printTable(response_tbl)
         end
-        self.events:dispatchEvent({name="DynamoDbEvent", error=nil, result=response_tbl, response=evt.response})
+        self.events:dispatchEvent({name="DynamoDBEvent", error=nil, result=response_tbl, response=evt.response})
       elseif evt.status == 400 then
         --retry on ThrottlingException and ProvisionedThroughputExceededException
         if string.ends(response_tbl.__type, "#ThrottlingException") then
-          self.events:dispatchEvent({name="DynamoDbEvent", error=1, reason='ThrottlingException, retrying...', status=evt.status})
+          self.events:dispatchEvent({name="DynamoDBEvent", error=1, reason='ThrottlingException, retrying...', status=evt.status})
           self:retryRequest()
         elseif string.ends(response_tbl.__type, "#ProvisionedThroughputExceededException") then
-          self.events:dispatchEvent({name="DynamoDbEvent", error=1, reason='ProvisionedThroughputExceededException, retrying...', status=evt.status})
+          self.events:dispatchEvent({name="DynamoDBEvent", error=1, reason='ProvisionedThroughputExceededException, retrying...', status=evt.status})
           self:retryRequest()
         else --catch all other 400's
           self:clearRetryTimer()
-          self.events:dispatchEvent({name="DynamoDbEvent", error=1, reason=response_tbl.message, status=evt.status}) 
+          self.events:dispatchEvent({name="DynamoDBEvent", error=1, reason=response_tbl.message, status=evt.status}) 
         end    
       elseif evt.status == 500 then --internal server error
-        self.events:dispatchEvent({name="DynamoDbEvent", error=1, reason='Internal Server Error, retrying...', status=evt.status})
+        self.events:dispatchEvent({name="DynamoDBEvent", error=1, reason='Internal Server Error, retrying...', status=evt.status})
         self:retryRequest()
       elseif evt.status == 503 then --service unavailable
-        self.events:dispatchEvent({name="DynamoDbEvent", error=1, reason='Service Unavailable, retrying...', status=evt.status})
+        self.events:dispatchEvent({name="DynamoDBEvent", error=1, reason='Service Unavailable, retrying...', status=evt.status})
         self:retryRequest()
       else
         --catch all error
         self:clearRequest()
         self:clearRetryTimer()
-        self.events:dispatchEvent({name="DynamoDbEvent", error=1, reason=response_tbl.message, status=evt.status})
+        self.events:dispatchEvent({name="DynamoDBEvent", error=1, reason=response_tbl.message, status=evt.status})
       end
     end
   end
@@ -107,7 +107,7 @@ function m:retryRequest()
   if self.retry_delay >= 30000 then
     --cannot get request through
     self:clearRequest()
-    self.events:dispatchEvent({name="DynamoDbEvent", isError=1, reason="Maximum retries exceeded. Failed after 30 seconds."})
+    self.events:dispatchEvent({name="DynamoDBEvent", isError=1, reason="Maximum retries exceeded. Failed after 30 seconds."})
   else
     self:tryRequest()
   end

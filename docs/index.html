@@ -165,7 +165,7 @@
     print(evt.result.some_key)
   end
 end
-db.events:addEventListener(dbListener)
+db.events:addEventListener(&quot;DynamoDBEvent&quot;, dbListener)
 
 db:request( action, payload )</code></pre>
 
@@ -217,5 +217,5 @@ db:request( action, payload )</code></pre>
 
 <!--
 MkDocs version : 0.16.3
-Build Date UTC : 2017-06-28 23:43:41
+Build Date UTC : 2017-06-28 23:58:07
 -->

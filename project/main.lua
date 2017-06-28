@@ -19,7 +19,7 @@ function dbEventListener( evt )
   end
 end
 
-db.events:addEventListener( "DynamoDbEvent", dbEventListener )
+db.events:addEventListener( "DynamoDBEvent", dbEventListener )
 
 --###############################################################################
 --# Test Requests

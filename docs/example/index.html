@@ -149,7 +149,7 @@ function dbEventListener( evt )
 end
 
 --add event listener
-db.events:addEventListener( &quot;DynamoDbEvent&quot;, dbEventListener )
+db.events:addEventListener( &quot;DynamoDBEvent&quot;, dbEventListener )
 
 --make DynamoDB request
 db:request(&quot;GetItem&quot;, payload)</code></pre>
