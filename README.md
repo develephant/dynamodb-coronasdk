@@ -1,4 +1,4 @@
-# dynamodb-corona
+# DynamoDB Module for Corona
 
 Amazon DynamoDB Plugin for Corona SDK
 
