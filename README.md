@@ -1,6 +1,4 @@
-# DynamoDB Module for Corona
-
-Amazon DynamoDB Plugin for Corona SDK
+# AWS DynamoDB Module for Corona
 
 ## Module Documentation
 
