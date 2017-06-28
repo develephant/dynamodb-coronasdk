@@ -1,2 +1,3 @@
 aws.txt
-project/auth.lua
+docs-src
+project/myauth.lua
