@@ -1,8 +1,11 @@
-site_name: DynamoDB Plugin
+site_name: DynamoDB Module
 site_dir: ../docs
 theme: readthedocs
 pages:
   - 'Introduction': 'index.md'
-  - 'Setup': 'setup.md'
-  - 'Usage': 'usage.md'
+  - 'Overview': 'usage.md'
   - 'API': 'api.md'
+  - 'Examples': 'example.md'
+markdown_extensions:
+  - admonition
+  - codehilite
