@@ -120,8 +120,8 @@
 <pre class="codehilite"><code class="language-lua">--require module
 local db = require('dynamodb.client')
 
---create new instance
-db:new({
+--initialize
+db:init({
   aws_key = &quot;&lt;AWS access key&gt;&quot;,
   aws_secret = &quot;&lt;AWS secret key&quot;&gt;,
   aws_region = &quot;us-east-1&quot;,
@@ -148,6 +148,7 @@ function dbEventListener( evt )
   end
 end
 
+--add event listener
 db.events:addEventListener( &quot;DynamoDbEvent&quot;, dbEventListener )
 
 --make DynamoDB request

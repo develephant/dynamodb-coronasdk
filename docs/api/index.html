@@ -66,7 +66,7 @@
     
         <ul>
         
-            <li><a class="toctree-l3" href="#new">new</a></li>
+            <li><a class="toctree-l3" href="#init">init</a></li>
         
             <li><a class="toctree-l3" href="#request">request</a></li>
         
@@ -155,9 +155,9 @@
             <div class="section">
               
                 <h1 id="methods">Methods</h1>
-<h2 id="new">new</h2>
-<p>Create a new instance of the DynamoDB object.</p>
-<pre class="codehilite"><code class="language-lua">local db = dynamodb:new( config )</code></pre>
+<h2 id="init">init</h2>
+<p>Initialize the DynamoDB object.</p>
+<pre class="codehilite"><code class="language-lua">db:init( config )</code></pre>
 
 
 <p><strong>Config Properties</strong></p>
@@ -193,10 +193,9 @@
 </tbody>
 </table>
 <p><strong>Example</strong></p>
-<pre class="codehilite"><code class="language-lua">local dynamodb = require(&quot;dynamodb.client&quot;)
+<pre class="codehilite"><code class="language-lua">local db = require(&quot;dynamodb.client&quot;)
 
-local db = dynamodb:new(
-{
+db:init({
   aws_key = auth.key,
   aws_secret = auth.secret,
   aws_region = &quot;us-east-1&quot;,
@@ -245,7 +244,8 @@ local db = dynamodb:new(
 <h1 id="events">Events</h1>
 <h2 id="dynamodbevent">DynamoDBEvent</h2>
 <p>To capture the request response data, you must register an event listener.</p>
-<pre class="codehilite"><code class="language-lua">local function dynamoDBResponse( evt )
+<pre class="codehilite"><code class="language-lua">--set up listener function
+local function dynamoDBResponse( evt )
   if evt.error then
     print(evt.reason, evt.status)
   else
@@ -257,9 +257,11 @@ local db = dynamodb:new(
   end
 end
 
+--add event listener
 db.events:addEventListener(&quot;DynamoDBEvent&quot;, dynamoDBResponse)
 
-db:request(&quot;GetItem&quot;, payload)</code></pre>
+--make request
+db:request(&quot;ListTables&quot;, pay{Limit=5}load)</code></pre>
 
 
 <h1 id="attribute-type-methods">Attribute Type Methods</h1>

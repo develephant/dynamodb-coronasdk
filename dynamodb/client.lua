@@ -22,7 +22,7 @@ local AWSAuth = require('dynamodb.awsauth')
 
 local m = {}
 
-function m:new( options )
+function m:init( options )
 
   self.events = events
 

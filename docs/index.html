@@ -62,7 +62,7 @@
         
             <li><a class="toctree-l3" href="#add-the-module">Add the Module</a></li>
         
-            <li><a class="toctree-l3" href="#create-an-instance">Create an Instance</a></li>
+            <li><a class="toctree-l3" href="#initialize">Initialize</a></li>
         
             <li><a class="toctree-l3" href="#make-a-request">Make a Request</a></li>
         
@@ -151,14 +151,14 @@
 
 
 <h2 id="add-the-module">Add the Module</h2>
-<pre class="codehilite"><code class="language-lua">local dynamodb = require(&quot;dynamodb.client&quot;)</code></pre>
+<pre class="codehilite"><code class="language-lua">local db = require(&quot;dynamodb.client&quot;)</code></pre>
 
 
-<h2 id="create-an-instance">Create an Instance</h2>
-<pre class="codehilite"><code class="language-lua">local db = dynamodb:new( config )</code></pre>
+<h2 id="initialize">Initialize</h2>
+<pre class="codehilite"><code class="language-lua">db:init( config )</code></pre>
 
 
-<p>See <strong><a href="./api/#new">new()</a></strong> for configuration options.</p>
+<p>See <strong><a href="./api/#init">init()</a></strong> for configuration options.</p>
 <h2 id="make-a-request">Make a Request</h2>
 <pre class="codehilite"><code class="language-lua">local function dbListener( evt )
   if not evt.error then
@@ -217,5 +217,5 @@ db:request( action, payload )</code></pre>
 
 <!--
 MkDocs version : 0.16.3
-Build Date UTC : 2017-06-28 23:20:35
+Build Date UTC : 2017-06-28 23:43:41
 -->

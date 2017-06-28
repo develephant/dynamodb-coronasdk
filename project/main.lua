@@ -4,7 +4,7 @@ local db = require('dynamodb.client')
 local auth = require('auth')
 local payloads = require('test_payloads')
 
-db:new({
+db:init({
   aws_key = auth.key,
   aws_secret = auth.secret,
   aws_region = "us-east-1",
