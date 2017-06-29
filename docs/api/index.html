@@ -73,11 +73,13 @@
         </ul>
     
 
-    <li class="toctree-l2"><a href="#events">Events</a></li>
+    <li class="toctree-l2"><a href="#events">events</a></li>
     
         <ul>
         
             <li><a class="toctree-l3" href="#dynamodbevent">DynamoDBEvent</a></li>
+        
+            <li><a class="toctree-l3" href="#event-properties">Event Properties</a></li>
         
         </ul>
     
@@ -241,9 +243,10 @@ db:init({
 </table>
 <p>See <strong><a href="../usage/#actions">Actions</a></strong> for more details on action types.</p>
 <p>See <strong><a href="../example/#payloads">Examples</a></strong> for more details on payload types.</p>
-<h1 id="events">Events</h1>
+<hr />
+<h1 id="events">events</h1>
+<p>To capture the request response data, you must register an event listener on the <strong>events</strong> property.</p>
 <h2 id="dynamodbevent">DynamoDBEvent</h2>
-<p>To capture the request response data, you must register an event listener.</p>
 <pre class="codehilite"><code class="language-lua">--set up listener function
 local function dynamoDBResponse( evt )
   if evt.error then
@@ -261,9 +264,40 @@ end
 db.events:addEventListener(&quot;DynamoDBEvent&quot;, dynamoDBResponse)
 
 --make request
-db:request(&quot;ListTables&quot;, pay{Limit=5}load)</code></pre>
+db:request(&quot;ListTables&quot;, {Limit=5})</code></pre>
 
 
+<h2 id="event-properties">Event Properties</h2>
+<p>The "DynamoDBEvent" will fire when data from the service is returned. The event can contain the following properties.</p>
+<h3 id="error">error</h3>
+<p>If the <strong>error</strong> propery is set, an error of some type has occurred. You can view the reason, and status code using the event properties:</p>
+<pre class="codehilite"><code class="language-lua">local function dbListener( evt )
+  if evt.error then
+    --reason
+    print(evt.reason)
+    --status code
+    print(evt.status)
+  end
+end
+
+...</code></pre>
+
+
+<h3 id="result">result</h3>
+<p>If no error has occured then you can retreive the data table through the <strong>result</strong> property:</p>
+<pre class="codehilite"><code class="language-lua">local function dbListener( evt )
+  if not evt.error then
+    --result table
+    print(evt.result.some_key_path)
+  end
+end</code></pre>
+
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you'd like to get a hold of the raw JSON data response, you can use the <strong>response</strong> property. </p>
+</div>
+<hr />
 <h1 id="attribute-type-methods">Attribute Type Methods</h1>
 <p>DynamoDB attribute values require an attribute type. While you can manually create each value entry, these methods offer another approach, as well as, make sure the encoding is properly handled.</p>
 <p>For more details on attributes data see <strong><a href="http://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_AttributeValue.html">DynamoDB AttributeValue</a></strong>.</p>

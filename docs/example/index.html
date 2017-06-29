@@ -144,7 +144,7 @@ function dbEventListener( evt )
   if evt.error then
     print(evt.reason, evt.status)
   else
-    -- evt.result contains data table
+    local data_table = evt.result --Lua table
   end
 end
 
